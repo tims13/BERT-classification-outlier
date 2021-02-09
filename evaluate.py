@@ -34,6 +34,6 @@ def evaluate(model, test_loader,device, des_folder):
     ax.set_xlabel('Predicted Labels')
     ax.set_ylabel('True Labels')
 
-    ax.xaxis.set_ticklabels(['REVIEW', 'NEED'])
-    ax.yaxis.set_ticklabels(['REVIEW', 'NEED'])
+    ax.xaxis.set_ticklabels(['NEED', 'REVIEW'])
+    ax.yaxis.set_ticklabels(['NEED', 'REVIEW'])
     plt.savefig(des_folder + 'eval.png')
