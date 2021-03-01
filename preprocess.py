@@ -6,10 +6,13 @@ import numpy as np
 from utils import trim_string
 from sklearn.model_selection import train_test_split
 
-needs_file_path = 'laptop/needs_byasin.csv'
-needs_preprocessed_path = 'laptop/needs.csv'
-review_file_path = 'laptop/amazon_reviews.csv'
 des_path = 'laptop/'
+needs_file_path = des_path + 'needs_byasin.csv'
+needs_preprocessed_path = des_path + 'needs.csv'
+review_file_path = des_path + 'amazon_reviews.csv'
+
+novel_file_path = des_path + 'novel_needs.xlsx'
+novel_needs_csv_path = des_path + 'novel_needs.csv'
 
 train_test_ratio = 0.90
 train_valid_ratio = 0.80
@@ -57,5 +60,11 @@ df_test = pd.concat([df_need_test, df_review_test], ignore_index=True, sort=Fals
 df_train.to_csv(des_path + 'train.csv', index=False)
 df_valid.to_csv(des_path + 'valid.csv', index=False)
 df_test.to_csv(des_path + 'test.csv', index=False)
+
+# preprocess novel data
+novel_needs = pd.read_excel(novel_file_path, index_col=0)
+novel_needs["label"] = 1
+novel_needs.rename(columns={'make-up reviews': 'text'}, inplace=True)
+novel_needs.to_csv(novel_needs_csv_path, header=1, index=0)
 
 print("Finished...")

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import seaborn as sns
 from utils import load_metrics, load_checkpoint
-from evaluate import evaluate
+from evaluate import evaluate, evaluate_novelty
 
 des_folder = 'record/'
 num_epochs = 10
@@ -19,10 +19,10 @@ model = BERT().to(device)
 
 optimizer = optim.Adam(model.parameters(), lr=2e-5)
 
-train_iter, valid_iter, test_iter = load_data(device=device)
+train_iter, valid_iter, test_iter, novel_iter = load_data(device=device)
 
 print("start training...")
-# train(model=model, optimizer=optimizer, train_loader=train_iter, valid_loader=valid_iter, num_epochs=num_epochs, eval_every=len(train_iter) // 2, file_path=des_folder, device=device, best_valid_loss=float("Inf"))
+train(model=model, optimizer=optimizer, train_loader=train_iter, valid_loader=valid_iter, num_epochs=num_epochs, eval_every=len(train_iter) // 2, file_path=des_folder, device=device, best_valid_loss=float("Inf"))
 
 # save the training iteration figure
 train_loss_list, valid_loss_list, global_steps_list = load_metrics(des_folder + '/metrics.pt', device)
@@ -32,8 +32,10 @@ plt.xlabel('Global Steps')
 plt.ylabel('Loss')
 plt.legend()
 plt.savefig(des_folder + 'train_iter.png')
+plt.cla()
 
 # evaluate
 best_model = BERT().to(device)
 load_checkpoint(des_folder + '/model.pt', best_model, device)
 evaluate(best_model, test_iter, device, des_folder)
+evaluate_novelty(best_model, novel_iter, device)
