@@ -4,8 +4,6 @@ from model import BERT
 from data_loader import load_data
 from train import train
 import matplotlib.pyplot as plt
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
-import seaborn as sns
 from utils import load_metrics, load_checkpoint
 from evaluate import evaluate, evaluate_novelty
 
@@ -38,4 +36,4 @@ plt.cla()
 best_model = BERT().to(device)
 load_checkpoint(des_folder + '/model.pt', best_model, device)
 evaluate(best_model, test_iter, device, des_folder)
-# evaluate_novelty(best_model, novel_iter, device)
+evaluate_novelty(best_model, novel_iter, device)

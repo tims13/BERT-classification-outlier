@@ -1,8 +1,11 @@
 # Evaluation Function
+from operator import index
 import torch
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import seaborn as sns
+import numpy as np
+import pandas as pd
 
 def evaluate(model, test_loader,device, des_folder):
     y_pred = []
@@ -38,7 +41,7 @@ def evaluate(model, test_loader,device, des_folder):
     ax.yaxis.set_ticklabels(['NEED', 'REVIEW'])
     plt.savefig(des_folder + 'eval.png')
 
-def evaluate_novelty(model, novel_loader,device):
+def evaluate_novelty(model, novel_loader,device, data_novel_csv_path = 'sentence/data_novel.csv', data_result_csv_path = 'sentence/novel_result.csv'):
     y_pred = []
     y_true = []
 
@@ -58,3 +61,8 @@ def evaluate_novelty(model, novel_loader,device):
     print("novel:")
     print("y_pred:", y_pred)
     print("y_true:", y_true)
+    data_novel = pd.read_csv(data_novel_csv_path)
+    data_novel['true'] = np.array(y_true, dtype=int)
+    data_novel['pred'] = np.array(y_pred, dtype=int)
+    data_novel.to_csv(data_result_csv_path, index=False)
+    
