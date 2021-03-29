@@ -2,7 +2,7 @@ import torch
 from torchtext.data import Field, TabularDataset, BucketIterator, Iterator
 from transformers import BertTokenizer, BertForSequenceClassification
 
-def load_data(device, source_folder = 'laptop'):
+def load_data(device, source_folder = 'sentence'):
     print("load_data - device:", device)
 
     tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
@@ -25,7 +25,7 @@ def load_data(device, source_folder = 'laptop'):
                                             test='test.csv', format='CSV', fields=fields, skip_header=True)
 
     novel = TabularDataset(
-    path = source_folder + '/novel_needs.csv',
+    path = source_folder + '/novel.csv',
     format = 'csv',
     skip_header = True,
     fields = fields

@@ -58,11 +58,8 @@ def evaluate_novelty(model, novel_loader,device, data_novel_csv_path = 'sentence
                 _, output = output
                 y_pred.extend(torch.argmax(output, 1).tolist())
                 y_true.extend(labels.tolist())
-    print("novel:")
-    print("y_pred:", y_pred)
-    print("y_true:", y_true)
+
     data_novel = pd.read_csv(data_novel_csv_path)
-    data_novel['true'] = np.array(y_true, dtype=int)
     data_novel['pred'] = np.array(y_pred, dtype=int)
     data_novel.to_csv(data_result_csv_path, index=False)
     
