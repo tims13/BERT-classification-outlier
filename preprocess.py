@@ -1,70 +1,95 @@
-import matplotlib.pyplot as plt
-import pandas as pd
-import torch
+from operator import index
+import os
 import numpy as np
-
-from utils import trim_string
+import pandas as pd
 from sklearn.model_selection import train_test_split
+from utils import trim_string, sentence_token_nltk
 
-des_path = 'laptop/'
-needs_file_path = des_path + 'needs_byasin.csv'
-needs_preprocessed_path = des_path + 'needs.csv'
-review_file_path = des_path + 'amazon_reviews.csv'
-
-novel_file_path = des_path + 'novel_needs.xlsx'
-novel_needs_csv_path = des_path + 'novel_needs.csv'
+des_path = 'sentence/'
+data_path = des_path + 'annotation_sentence.xlsx'
+data_need_path = des_path + 'needs.csv'
+data_pos_csv_path = des_path + 'data_pos.csv'
+data_neg_csv_path = des_path + 'data_neg.csv'
+data_irre_csv_path = des_path + 'data_irre.csv'
+data_novel_csv_path = des_path + 'data_novel.csv'
+data_need_csv_path = des_path + 'data_need.csv'
 
 train_test_ratio = 0.90
 train_valid_ratio = 0.80
 
-needs = pd.read_csv(needs_file_path, index_col=0)
+data_paths = [
+    data_pos_csv_path,
+    data_neg_csv_path,
+    data_irre_csv_path,
+    data_novel_csv_path
+]
 
-data_needs = needs.iloc[:,0].astype(str)
-data_needs = data_needs[data_needs != 'nan']
+headers = [
+    ['pos'],
+    ['neg'],
+    ['irre'],
+    ['novel']
+]
 
-for index in range(1, needs.shape[1]):
-    temp = needs.iloc[:,index].astype(str)
-    temp = temp[temp != 'nan']
-    data_needs = pd.concat([data_needs, temp])
+data = pd.read_excel(data_path)
+data = data.iloc[:, 0:4]
 
-data_needs.reset_index(drop=True, inplace=True)
-data_needs.to_csv(needs_preprocessed_path, index=0)
+for i in range(4):
+    data_t = data.iloc[:, i].astype(str)
+    data_t = data_t[data_t != 'nan']
+    data_t.reset_index(drop=True, inplace=True)
+    data_t.to_csv(data_paths[i], header=headers[i], index=0)
 
-data_needs = pd.read_csv(needs_preprocessed_path)
+# need
+data_need = pd.read_csv(data_need_path)
+sentences = []
+for i in range(data_need.shape[0]):
+    s = data_need.iloc[i][0]
+    sentence = sentence_token_nltk(s)
+    sentences.append(sentence[0])
+df_need_sentence = pd.DataFrame(sentences, columns=['text'])
+df_need_sentence.to_csv(data_need_csv_path)
 
-data_needs["label"] = 1
-data_needs['0'] = data_needs['0'].apply(trim_string)
-data_needs.rename(columns={'0': 'text'}, inplace=True)
+data_pos = pd.read_csv(data_pos_csv_path)
+data_pos['label'] = 0
+data_pos.rename(columns={'pos': 'text'}, inplace=True)
+data_pos['text'] = data_pos['text'].apply(trim_string)
 
+data_neg = pd.read_csv(data_neg_csv_path)
+data_neg['label'] = 0
+data_neg.rename(columns={'neg': 'text'}, inplace=True)
+data_neg['text'] = data_neg['text'].apply(trim_string)
 
-data_review = pd.read_csv(review_file_path)
-data_review["label"] = 0
-data_review['0'] = data_review['0'].apply(trim_string)
-data_review.rename(columns={'0': 'text'}, inplace=True)
+# preprocess unknow intent / novelty
+data_novel = pd.read_csv(data_novel_csv_path)
+data_novel['label'] = 1
+data_novel.rename(columns={'novel': 'text'}, inplace=True)
+data_novel['text'] = data_novel['text'].apply(trim_string)
+
+# need
+data_need = pd.read_csv(data_need_csv_path)
+data_need['label'] = 1
+data_need['text'] = data_need['text'].apply(trim_string)
 
 # Train - Test
-df_need_full_train, df_need_test = train_test_split(data_needs, train_size = train_test_ratio, random_state=1)
-df_review_full_train, df_review_test = train_test_split(data_review, train_size = train_test_ratio, random_state=1)
+df_pos_full_train, df_pos_test = train_test_split(data_pos, train_size = train_test_ratio, random_state=1)
+df_neg_full_train, df_neg_test = train_test_split(data_neg, train_size = train_test_ratio, random_state=1)
+df_need_full_train, df_need_test = train_test_split(data_need, train_size = train_test_ratio, random_state=1)
 
 # Train - valid
+df_pos_train, df_pos_valid = train_test_split(df_pos_full_train, train_size = train_valid_ratio, random_state=1)
+df_neg_train, df_neg_valid = train_test_split(df_neg_full_train, train_size = train_valid_ratio, random_state=1)
 df_need_train, df_need_valid = train_test_split(df_need_full_train, train_size = train_valid_ratio, random_state=1)
-df_review_train, df_review_valid = train_test_split(df_review_full_train, train_size = train_valid_ratio, random_state=1)
-print("train-valid-test:")
-print("need:", df_need_train.shape, df_need_valid.shape, df_need_test.shape)
-print("review:", df_review_train.shape, df_review_valid.shape, df_review_test.shape)
 
-df_train = pd.concat([df_need_train, df_review_train], ignore_index=True, sort=False)
-df_valid = pd.concat([df_need_valid, df_review_valid], ignore_index=True, sort=False)
-df_test = pd.concat([df_need_test, df_review_test], ignore_index=True, sort=False)
+df_train = pd.concat([df_pos_train, df_neg_train, df_need_train], ignore_index=True, sort=False)
+df_valid = pd.concat([df_pos_valid, df_neg_valid, df_need_valid], ignore_index=True, sort=False)
+df_test = pd.concat([df_pos_test, df_neg_test, df_need_test], ignore_index=True, sort=False)
+
+print('train-valid-test', str(df_train.shape), str(df_valid.shape), str(df_test.shape))
 
 df_train.to_csv(des_path + 'train.csv', index=False)
 df_valid.to_csv(des_path + 'valid.csv', index=False)
 df_test.to_csv(des_path + 'test.csv', index=False)
+data_novel.to_csv(des_path + 'novel.csv', index=False)
 
-# preprocess novel data
-novel_needs = pd.read_excel(novel_file_path, index_col=0)
-novel_needs["label"] = 1
-novel_needs.rename(columns={'make-up reviews': 'text'}, inplace=True)
-novel_needs.to_csv(novel_needs_csv_path, header=1, index=0)
-
-print("Finished...")
+print("Preprocess finished")

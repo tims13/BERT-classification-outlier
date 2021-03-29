@@ -1,7 +1,11 @@
 import torch
+from nltk.tokenize import sent_tokenize
 
-first_n_words = 200
-def trim_string(x):
+def sentence_token_nltk(str):
+    sent_tokenize_list = sent_tokenize(str)
+    return sent_tokenize_list
+
+def trim_string(x, first_n_words = 200):
 
     x = x.split(maxsplit=first_n_words)
     x = ' '.join(x[:first_n_words])
