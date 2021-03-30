@@ -7,7 +7,7 @@ from utils import trim_string, sentence_token_nltk
 
 des_path = 'sentence/'
 data_path = des_path + 'annotation_sentence.xlsx'
-data_need_path = des_path + 'needs.csv'
+data_need_path = des_path + 'needs_com.csv'
 data_pos_csv_path = des_path + 'data_pos.csv'
 data_neg_csv_path = des_path + 'data_neg.csv'
 data_irre_csv_path = des_path + 'data_irre.csv'
