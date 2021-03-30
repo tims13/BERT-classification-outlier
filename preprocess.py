@@ -12,7 +12,7 @@ data_pos_csv_path = des_path + 'data_pos.csv'
 data_neg_csv_path = des_path + 'data_neg.csv'
 data_irre_csv_path = des_path + 'data_irre.csv'
 data_novel_csv_path = des_path + 'data_novel.csv'
-data_need_csv_path = des_path + 'data_need.csv'
+data_need_csv_path = des_path + 'data_need_com.csv'
 
 train_test_ratio = 0.90
 train_valid_ratio = 0.80
@@ -41,6 +41,7 @@ for i in range(4):
     data_t.to_csv(data_paths[i], header=headers[i], index=0)
 
 # need
+'''
 data_need = pd.read_csv(data_need_path)
 sentences = []
 for i in range(data_need.shape[0]):
@@ -49,7 +50,7 @@ for i in range(data_need.shape[0]):
     sentences.append(sentence[0])
 df_need_sentence = pd.DataFrame(sentences, columns=['text'])
 df_need_sentence.to_csv(data_need_csv_path)
-
+'''
 data_pos = pd.read_csv(data_pos_csv_path)
 data_pos['label'] = 0
 data_pos.rename(columns={'pos': 'text'}, inplace=True)
