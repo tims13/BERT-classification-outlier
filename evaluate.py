@@ -37,8 +37,8 @@ def evaluate(model, test_loader,device, des_folder):
     ax.set_xlabel('Predicted Labels')
     ax.set_ylabel('True Labels')
 
-    ax.xaxis.set_ticklabels(['NEED', 'REVIEW'])
-    ax.yaxis.set_ticklabels(['NEED', 'REVIEW'])
+    ax.xaxis.set_ticklabels(['INFORMATIVE', 'UNINFORMATIVE'])
+    ax.yaxis.set_ticklabels(['INFORMATIVE', 'UNINFORMATIVE'])
     plt.savefig(des_folder + 'eval.png')
 
 def evaluate_novelty(model, novel_loader,device, data_novel_csv_path = 'sentence/novel.csv', data_result_csv_path = 'record/novel_result.csv'):
