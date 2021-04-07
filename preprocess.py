@@ -76,7 +76,8 @@ df_train = pd.concat([df_pos_train, df_neg_train, df_irre_train, df_novel_train]
 df_valid = pd.concat([df_pos_valid, df_neg_valid, df_irre_valid, df_novel_valid], ignore_index=True, sort=False)
 df_test = pd.concat([df_pos_test, df_neg_test, df_irre_test, df_novel_test], ignore_index=True, sort=False)
 
-print('irre:', str(data_irre.shape))
+print('irre:', str(data_irre.shape[0]))
+print('re:', str(data_pos.shape[0] + data_neg.shape[0] + data_novel.shape[0]))
 print('train-valid-test', str(df_train.shape), str(df_valid.shape), str(df_test.shape))
 
 df_train.to_csv(des_path + 'train.csv', index=False)
