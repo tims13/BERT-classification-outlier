@@ -17,7 +17,7 @@ def evaluate(model, test_loader,device, des_folder):
 
                 labels = labels.type(torch.LongTensor)           
                 labels = labels.to(device)
-                text = text.type(torch.LongTensor)  
+                text = text.type(torch.LongTensor)
                 text = text.to(device)
                 output = model(text, labels)
 
@@ -37,8 +37,8 @@ def evaluate(model, test_loader,device, des_folder):
     ax.set_xlabel('Predicted Labels')
     ax.set_ylabel('True Labels')
 
-    ax.xaxis.set_ticklabels(['INFORMATIVE', 'UNINFORMATIVE'])
-    ax.yaxis.set_ticklabels(['INFORMATIVE', 'UNINFORMATIVE'])
+    ax.xaxis.set_ticklabels(['NEED', 'NON-NEED'])
+    ax.yaxis.set_ticklabels(['NEED', 'NON-NEED'])
     plt.savefig(des_folder + 'eval.png')
 
 def evaluate_novelty(model, novel_loader,device, data_novel_csv_path = 'sentence/novel.csv', data_result_csv_path = 'record/novel_result.csv'):
