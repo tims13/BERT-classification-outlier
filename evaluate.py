@@ -43,7 +43,7 @@ def evaluate(model, test_loader,device, des_folder):
 
     # save the predicted results
     des_path = 'sentence/'
-    data_test = des_path + 'test.csv'
+    data_test = pd.read_csv(des_path + 'test.csv')
     data_test['pred'] = np.array(y_pred, dtype=int)
     data_test.to_csv(des_folder + 'results.csv')
 
