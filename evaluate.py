@@ -41,6 +41,12 @@ def evaluate(model, test_loader,device, des_folder):
     ax.yaxis.set_ticklabels(['NEED', 'NON-NEED'])
     plt.savefig(des_folder + 'eval.png')
 
+    # save the predicted results
+    des_path = 'sentence/'
+    data_test = des_path + 'test.csv'
+    data_test['pred'] = np.array(y_pred, dtype=int)
+    data_test.to_csv(des_folder + 'results.csv')
+
 def evaluate_novelty(model, novel_loader,device, data_novel_csv_path = 'sentence/novel.csv', data_result_csv_path = 'record/novel_result.csv'):
     y_pred = []
     y_true = []
