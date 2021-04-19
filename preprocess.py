@@ -12,7 +12,7 @@ data_pos_csv_path = des_path + 'data_pos.csv'
 data_neg_csv_path = des_path + 'data_neg.csv'
 data_irre_csv_path = des_path + 'data_irre.csv'
 data_novel_csv_path = des_path + 'data_novel.csv'
-data_need_csv_path = des_path + 'data_need.csv'
+data_need_csv_path = des_path + 'need_all_sentence.csv'
 
 train_test_ratio = 0.90
 train_valid_ratio = 0.80
