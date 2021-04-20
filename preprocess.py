@@ -60,7 +60,7 @@ data_novel['label'] = 1
 data_novel.rename(columns={'novel': 'text'}, inplace=True)
 data_novel['text'] = data_novel['text'].apply(trim_string)
 
-data_need = pd.read_csv(data_need_csv_path)
+data_need = pd.read_csv(data_need_csv_path, index_col=0)
 data_need['label'] = 1
 data_need['text'] = data_need['text'].apply(trim_string)
 
