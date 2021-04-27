@@ -70,7 +70,7 @@ df_neg_full_train, df_neg_test = train_test_split(data_neg, train_size = train_t
 df_irre_full_train, df_irre_test = train_test_split(data_irre, train_size = train_test_ratio, random_state=1)
 # df_novel_full_train, df_novel_test = train_test_split(data_novel, train_size = train_test_ratio, random_state=1)
 df_need_full_train, df_need_test = train_test_split(data_need, train_size = train_test_ratio, random_state=1)
-
+print('test : pos,neg,irre,need: ', str(df_pos_test.shape), str(df_neg_test.shape), str(df_irre_test.shape), str(df_need_test.shape))
 # Train - valid
 df_pos_train, df_pos_valid = train_test_split(df_pos_full_train, train_size = train_valid_ratio, random_state=1)
 df_neg_train, df_neg_valid = train_test_split(df_neg_full_train, train_size = train_valid_ratio, random_state=1)
