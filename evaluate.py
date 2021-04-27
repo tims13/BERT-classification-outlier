@@ -45,6 +45,8 @@ def evaluate(model, test_loader,device, des_folder):
     des_path = 'sentence/'
     data_test = pd.read_csv(des_path + 'test.csv')
     data_test['pred'] = np.array(y_pred, dtype=int)
+    data_test_positive = data_test[data_test['pred'] == 1]
+    data_test_positive.to_csv(des_folder + 'res_pos.csv')
     data_test.to_csv(des_folder + 'results.csv')
 
 def evaluate_novelty(model, novel_loader,device, data_novel_csv_path = 'sentence/novel.csv', data_result_csv_path = 'record/novel_result.csv'):

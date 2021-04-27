@@ -14,7 +14,7 @@ data_irre_csv_path = des_path + 'data_irre.csv'
 data_novel_csv_path = des_path + 'data_novel.csv'
 data_need_csv_path = des_path + 'need_all_sentence.csv'
 
-train_test_ratio = 0.90
+train_test_ratio = 0.80
 train_valid_ratio = 0.80
 
 data_paths = [
